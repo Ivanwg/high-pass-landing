@@ -1,0 +1,245 @@
+@import '_variables.scss';
+
+@mixin fontFaceSwap($fontName, $fontWeight) {
+  $fontWeightLiteral: '';
+  $changedFontName: $fontName;
+
+  @if $fontName == 'TT Firs Neue' {
+    $changedFontName: 'TTFirsNeue';
+  }
+
+
+  @if $fontWeight == 700 {
+    $fontWeightLiteral: 'Bold';
+  } @else if $fontWeight == 400 {
+    $fontWeightLiteral: 'Regular';
+  } @else if $fontWeight == 500 {
+    $fontWeightLiteral: 'Medium';
+  } @else {
+    @error "Unexpected value of font-weight #{$fontWeight}.";
+  }
+
+  @font-face {
+    font-family: $fontName;
+    font-display: swap;
+    src: local('#{$fontName}-#{$fontWeightLiteral}'), local('#{$fontName}#{$fontWeightLiteral}'), local('#{$fontName} #{$fontWeightLiteral}'),
+         url('../fonts/#{$changedFontName}-#{$fontWeightLiteral}.woff2') format('woff2'),
+         url('../fonts/#{$changedFontName}-#{$fontWeightLiteral}.woff') format('woff');
+    font-weight: $fontWeight;
+    font-style: normal;
+  }
+}
+
+@mixin fontProperties($size, $color, $fontRowName: $fontsRowRoboto, $fontWeight: 400, $lineHeight: 1) {
+  font-family: $fontRowName;
+  font-weight: $fontWeight;
+  font-size: $size;
+  font-style: normal;
+  color: $color;
+  line-height: $lineHeight;
+}
+
+@mixin dateText($dateColor) {
+  @include fontProperties(12px, $dateColor, $lineHeight: 22px);
+}
+
+@mixin dateSpan($calendarPath, $translateY: -1px) {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 14px;
+  height: 14px;
+  background-image: url($calendarPath);
+  background-repeat: no-repeat;
+  background-size: contain;
+  transform: translateY($translateY);
+}
+
+@mixin marker($top, $right, $paddingTop) {
+  position: absolute;
+  top: $top;
+  right: $right;
+  content: '';
+  z-index: 4;
+  padding: $paddingTop 14px;
+  @include fontProperties(14px, $mainWhite, $lineHeight: 16px);
+  background-color: $mainBlack;
+}
+
+@mixin linkTransition($property, $time: .2s) {
+  transition: $property $time ease-in-out;;
+}
+
+@mixin background-grey ($height) {
+  position: absolute;
+  bottom: 0;
+  left: 0;;
+  content: '';
+  display: block;
+  width: 100%;
+  height: $height;
+  background-color: $backgroundGrey;
+}
+
+@mixin positionZero ($position) {
+  position: $position;
+  left: 0;
+  top: 0;
+  content: '';
+}
+
+@mixin grid ($col, $size: 1fr, $autoRows: auto, $gap: $gridGap) {
+  display: grid;
+  grid-template-columns: repeat($col, $size);
+  grid-auto-rows: $autoRows;
+  // grid-auto-columns: 1fr;
+  // grid-auto-flow: column;
+  gap: $gap;
+  justify-items: stretch;
+  align-items: stretch;
+}
+
+@mixin gridWithoutRepeat ($cols, $autoRows: auto, $gap: $gridGap) {
+  display: grid;
+  grid-template-columns: $cols;
+  grid-auto-rows: $autoRows;
+  // grid-auto-columns: 1fr;
+  // grid-auto-flow: column;
+  gap: $gap;
+  justify-items: stretch;
+  align-items: stretch;
+}
+
+@mixin colSize ($size) {
+  grid-column: span $size;
+}
+
+@mixin fontSizeHeight($size, $height) {
+  font-size: $size;
+  line-height: $height;
+}
+
+@mixin minHeightOnMobile ($height: 422px) {
+  min-height: $height;
+}
+
+@mixin active ($color: $mainWhite, $borderRadius: none, $x: 1.2, $y: 1.6, $name: 'normal', $opacity: 0.2) {
+  position: relative;
+  transition: transform box-shadow .2s ease-in;
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    background-color: $color;
+    border-radius: $borderRadius;
+    @include linkTransition(animation, .4s);
+    opacity: 0;
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+
+    &::after {
+      @if $name == 'normal' {
+        animation: moveInBottom .3s ease;
+        animation-fill-mode: backwards;
+        @keyframes moveInBottom {
+          0% {
+              opacity: $opacity;
+              transform: scaleX(1) scaleY(1);
+          }
+
+          100% {
+              opacity: 0;
+              transform: scaleX($x) scaleY($y);
+          }
+        }
+      } @else if $name == 'circle' {
+          animation: moveCircle .3s ease;
+          animation-fill-mode: backwards;
+          @keyframes moveCircle {
+            0% {
+                opacity: $opacity;
+                transform: scaleX(1) scaleY(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scaleX($x) scaleY($y);
+            }
+          }
+      } @else {
+          animation: moveOrange .3s ease;
+          animation-fill-mode: backwards;
+          @keyframes moveOrange {
+            0% {
+                opacity: $opacity;
+                transform: scaleX(1) scaleY(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scaleX($x) scaleY($y);
+            }
+          }
+      }
+    }
+  }
+}
+
+@mixin btnBGCfill ($bgc) {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  transition: all 1s ease;
+  &:after {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    content: "";
+    z-index: -1;
+    width: 150%;
+    height: 450%;
+    background: $bgc;
+    @include linkTransition(transform, 0.55s);
+    transform: translateX(-50%) translateY(-50%) rotate(25deg) scale(1, 0);
+  }
+  &:hover:after {
+    transform: translateX(-50%) translateY(-50%) rotate(25deg) scale(1);
+  }
+}
+
+@mixin focus {
+  &:focus-visible {
+    outline: 2px solid $hoverOrange;
+    border: none;
+  }
+}
+
+@mixin phone {
+  padding-top: 2px;
+  color: $mainOrange;
+  line-height: 20px;
+  vertical-align: middle;
+  @include linkTransition(color);
+  &:hover {
+    color: $hoverOrange;
+    svg path {
+      fill: $hoverOrange;
+    }
+  }
+  svg {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translateY(-2px);
+    path {
+      @include linkTransition(fill);
+    }
+  }
+}

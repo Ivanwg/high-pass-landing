@@ -1,0 +1,182 @@
+@import '_variables.scss';
+@import '_mixins.scss';
+
+@include fontFaceSwap('TT Firs Neue', 400);
+@include fontFaceSwap('TT Firs Neue', 500);
+@include fontFaceSwap('TT Firs Neue', 700);
+@include fontFaceSwap('Roboto', 400);
+@include fontFaceSwap('Roboto', 700);
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  font-family: $fontsRowRoboto;
+  font-weight: 400;
+  font-style: normal;
+  background-color: var(--main-color);
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.container {
+  max-width: $containerMaxWidth;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+a, button, input, textarea,
+.link,
+.btn {
+  @include focus;
+}
+
+.btn {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.btn_hidden {
+  @extend .btn;
+  cursor: none;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.btn_orange,
+.btn_orange:link,
+.btn_orange:visited {
+  padding: 15px 22px;
+  @include fontProperties(16px, $mainWhite, $fontWeight: 700, $lineHeight: 20px);
+  background-color: $mainOrange;
+  @include linkTransition(background-color);
+  &:hover {
+    background-color: $hoverOrange;
+  }
+
+}
+
+.btn_transparent,
+.btn_transparent:link,
+.btn_transparent:visited {
+  @extend .btn_orange;
+  background-color: transparent;
+  border: 3px solid $mainOrange;
+  &:hover {
+    background-color: $mainOrange;
+  }
+}
+
+.active {
+  @include active($x: 1.2, $y: 1.6);
+  &_orange {
+    @include active($mainOrange, $name: 'orange', $opacity: 0.7);
+  }
+  &_circle {
+    @include active($borderRadius: 100px, $x: 2.2, $y: 2, $name: 'circle');
+  }
+}
+
+.title {
+  @include fontProperties(24px, $mainBlack, $fontsRowTTFirsNeue, 700, $lineHeight: 1);
+}
+
+.desc {
+  @include fontProperties(16px, $mainGrey, $lineHeight: 22px);
+}
+
+.logo-desc {
+  @include fontProperties(14px, $logoDesc, $fontsRowTTFirsNeue, $lineHeight:18px);
+  user-select: none;
+}
+
+.form {
+  input,
+  textarea {
+    &::placeholder {
+      @include fontProperties(16px, $lightGrey, $lineHeight: 19px);
+    }
+    &:focus {
+      color: $mainBlack;
+      &::placeholder {
+        color: $mainOrange;
+      }
+    }
+  }
+}
+
+.btn_close {
+  &:hover {
+    svg {
+      transform: rotate(23deg);
+      rect {
+      fill: $mainOrange;
+      }
+    }
+  }
+  svg {
+    @include linkTransition(transform);
+    rect {
+      @include linkTransition(fill);
+    }
+  }
+}
+
+
+[class*='ground-pane'] {
+  filter: grayscale(1);
+}
+
+@media (max-width: $mediaMiddle) {
+  .logo {
+    width: 166px;
+    height: 27px;
+  }
+}
+
+@media (max-width: $mediaMobile) {
+  .logo {
+    width: 112px;
+    height: 18px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .btn_orange {
+    padding: 12px 22px;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .form input {
+    &::placeholder {
+      @include fontSizeHeight(14px, 16px);
+    }
+  }
+}
