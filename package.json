@@ -24,7 +24,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-htmlmin": "^5.0.0",
     "gulp-if": "^3.0.0",
-    "gulp-image": "^6.2.1",
+    "gulp-image": "6.2.1",
     "gulp-notify": "^4.0.0",
     "gulp-sass": "^5.1.0",
     "gulp-sourcemaps": "^3.0.0",
